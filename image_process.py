@@ -1,6 +1,8 @@
 from transformers import TrOCRProcessor, VisionEncoderDecoderModel
 from PIL import Image
 import requests
+import openai
+import os
 
 # Load TrOCR model and processor
 processor = TrOCRProcessor.from_pretrained("microsoft/trocr-base-handwritten")
@@ -28,5 +30,20 @@ def recognize_handwriting_from_url(url):
 
     return extracted_text
 
-text_output = recognize_handwriting_from_url("https://raw.githubusercontent.com/Nava-s/Handwritten-text/refs/heads/main/images/handwritten/Figure_1.png")
-print("Extracted Text:", text_output)
+def summarize_text(text):
+    openai.api_key = os.getenv("OPENAI_API_KEY")
+    response = openai.ChatCompletion.create(
+        model="gpt-4o-mini",
+        messages=[
+            {"role": "system", "content": "You are an AI assistant that summarizes notes."},
+            {"role": "user", "content": f"Summarize the following handwritten note: {text}"}
+        ]
+    )
+    return response["choices"][0]["message"]["content"].strip()
+
+if __name__ == "__main__":
+    text_output = recognize_handwriting_from_url("https://miro.medium.com/v2/resize:fit:900/format:webp/1*-1mnBe7XQytSGa2YYZnWLQ.png")
+    print("Extracted Text:", text_output)
+    
+    summary = summarize_text(text_output)
+    print("Summarized Text:", summary)
