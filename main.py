@@ -18,7 +18,7 @@ textract = boto3.client('textract', config=textract_config, region_name='us-east
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Change this in production
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -90,10 +90,4 @@ async def _summarize_text(text):
 @app.get("/")
 async def health_check():
     return {"message": "Server is running!"}
-
-# if __name__ == "__main__":
-#     text_output = recognize_handwriting_from_url("https://images.squarespace-cdn.com/content/v1/58764bfdb3db2b3e1ed14061/d081d72e-8acb-4682-b5ed-097692369efa/IMG_4072.jpeg")
-#     print("Extracted Text:", text_output)
-    
-#     summary = _summarize_text(text_output)
-#     print("Summarized Text:", summary)
+ 
