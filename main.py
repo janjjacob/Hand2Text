@@ -14,7 +14,7 @@ textract_config = Config(
     connect_timeout=10,
     read_timeout=20
 )
-textract = boto3.client('textract', config=textract_config)
+textract = boto3.client('textract', config=textract_config, region_name='us-east-1')
 
 app.add_middleware(
     CORSMiddleware,
